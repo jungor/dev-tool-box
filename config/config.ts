@@ -2,10 +2,17 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
+import monacoEditorWebpackPlugin from 'monaco-editor-webpack-plugin'
 
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
+  chainWebpack(config) {
+    config.plugin('monaco-editor-webpack-plugin')
+      .use(new monacoEditorWebpackPlugin({
+        languages: ['mysql']
+      }))
+  },
   history: { type: 'hash' },
   hash: true,
   antd: {},
@@ -52,32 +59,10 @@ export default defineConfig({
               redirect: '/welcome',
             },
             {
-              path: '/welcome',
-              name: 'welcome',
+              path: '/mysql',
+              name: 'mysql',
               icon: 'smile',
-              component: './Welcome',
-            },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/admin/sub-page',
-                  name: 'sub-page',
-                  icon: 'smile',
-                  component: './Welcome',
-                  authority: ['admin'],
-                },
-              ],
-            },
-            {
-              name: 'list.table-list',
-              icon: 'table',
-              path: '/list',
-              component: './ListTableList',
+              component: './MySQL',
             },
             {
               component: './404',
@@ -98,7 +83,7 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
-  ignoreMomentLocale: false,
+  ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
     basePath: '/',

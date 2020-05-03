@@ -7,6 +7,7 @@ import monacoEditorWebpackPlugin from 'monaco-editor-webpack-plugin'
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
+  publicPath: '/dev-tool-box/',
   chainWebpack(config) {
     config.plugin('monaco-editor-webpack-plugin')
       .use(new monacoEditorWebpackPlugin({
@@ -56,7 +57,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/welcome',
+              redirect: '/mysql',
             },
             {
               path: '/mysql',

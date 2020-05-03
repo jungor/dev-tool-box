@@ -1,12 +1,13 @@
 import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import React, {useState} from "react";
 import MonacoEditor from "react-monaco-editor";
-import {Button, message} from "antd";
+import {Button, message, Select} from "antd";
 import NodeSQLParser from 'node-sql-parser'
 import {camelCase, upperFirst} from 'lodash'
 import {compose} from 'lodash/fp'
 import style from './index.less'
 
+const {Option} = Select
 const parser = new NodeSQLParser.Parser()
 
 function cvtType(t: string) {
@@ -81,18 +82,24 @@ const convert = (sql: string) => {
   }
 }
 
+const SUPPORT_LANGUAGE = ['mysql', 'proto', 'json']
+
 const MySQLPage: React.FC = () => {
+  const [srcLanguage, setSrcLanguage] = useState(SUPPORT_LANGUAGE[0]);
   const [srcCode, setSrcCode] = useState(initSql);
   const [rstCode, setRstCode] = useState('');
   const cvtCb = () => {
     setRstCode(convert(srcCode))
   }
   return <PageHeaderWrapper>
+    <Select defaultValue={srcLanguage} style={{ width: 120 }} onChange={setSrcLanguage}>
+      {SUPPORT_LANGUAGE.map((lan) => <Option value={lan} key={lan}>{lan}</Option>)}
+    </Select>
     <div className={style.wrapper}>
       <MonacoEditor
         width="600"
         height="600"
-        language="mysql"
+        language={srcLanguage}
         theme="vs-dark"
         value={srcCode}
         options={options}
